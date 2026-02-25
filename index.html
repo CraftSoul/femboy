@@ -20,8 +20,45 @@
             padding: 16px;
             margin: 0;
         }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .footer-simple {
+            text-align: center;
+            font-size: 1rem;
+            background: transparent;
+            color: #1f2b30;
+            margin-top: 30px;
+            padding: 12px 0;
+            border-top: 2px solid #cbbfb0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+        .footer-simple a {
+            color: #1f2b30;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #ece4d9;
+            padding: 8px 24px;
+            border-radius: 60px;
+            border: 2px solid #b89b7b;
+            transition: 0.15s;
+        }
+        .footer-simple a:hover {
+            background: #b89b7b;
+            color: white;
+            border-color: #6e543b;
+        }
+        .footer-simple img {
+            width: 24px;
+            height: 24px;
+            filter: none;
+        }
         .card {
-            max-width: 680px;
             width: 100%;
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
@@ -121,6 +158,7 @@
             margin-right: 6px;
         }
         .options {
+            width:90%
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
@@ -146,7 +184,6 @@
             cursor: pointer;
             box-shadow: 0 2px 0 #cfa97c;
             font-size: 1rem;
-            min-width: 80px;
         }
         .options label:hover {
             background: #ffdbbd;
@@ -184,7 +221,7 @@
             border-radius: 60px;
             padding: 22px 24px;
             width: 100%;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: 800;
             letter-spacing: 2px;
             color: #2d1705;
@@ -338,47 +375,10 @@
             margin: 0;
             padding: 0;
         }
-
-        .footer-simple {
-            text-align: center;
-            font-size: 1rem;
-            background: transparent;
-            color: #1f2b30;
-            margin-top: 30px;
-            padding: 12px 0;
-            border-top: 2px solid #cbbfb0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 24px;
-            flex-wrap: wrap;
-        }
-        .footer-simple a {
-            color: #1f2b30;
-            text-decoration: none;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #ece4d9;
-            padding: 8px 24px;
-            border-radius: 60px;
-            border: 2px solid #b89b7b;
-            transition: 0.15s;
-        }
-        .footer-simple a:hover {
-            background: #b89b7b;
-            color: white;
-            border-color: #6e543b;
-        }
-        .footer-simple img {
-            width: 24px;
-            height: 24px;
-            filter: none;
-        }
     </style>
 </head>
 <body>
+<div class="container">
     <div class="pseudo-modal-overlay" id="pseudoModal">
         <div class="pseudo-modal">
             <h2>⚡ 计算中 ⚡</h2>
@@ -443,23 +443,23 @@
 
         <!-- 最终结果动画容器(一开始为空) 将插入动态结果并清空原布局 -->
         <div id="resultAnimationArea" style="min-height:20px;"></div>
-
-        <div class="footer-simple">
-            <a href="https://github.com/CraftSoul/femboy" target="_blank">
-                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/github.svg" alt="gayhub" style="filter: invert(0);"> GitHub
-            </a>
-            <a href="https://space.bilibili.com/3546775476505152" target="_blank">
-                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/bilibili.svg" alt="ilidilid" style="filter: invert(0);"> BiliBili
-            </a>
-            <a href="https://www.douyin.com/user/MS4wLjABAAAAERwZXqP_VI8qTqzyV-A6aJircP4R6tiOBRCY5QCFQrAd_gZ8z-LsyNvUHuDipQ7S" target="_blank">
-                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="西大快乐音" style="filter: invert(0);"> 抖音
-            </a>
-            <a href="https://www.zhihu.com/people/7-97-53-5-79" target="_blank">
-                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/zhihu.svg" alt="不知" style="filter: invert(0);"> 知乎
-            </a>
-        </div>
     </div>
 
+    <div class="footer-simple">
+        <a href="https://github.com/CraftSoul/femboy" target="_blank">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/github.svg" alt="gayhub" style="filter: invert(0);"> GitHub
+        </a>
+        <a href="https://space.bilibili.com/3546775476505152" target="_blank">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/bilibili.svg" alt="ilidilid" style="filter: invert(0);"> BiliBili
+        </a>
+        <a href="https://www.douyin.com/user/MS4wLjABAAAAERwZXqP_VI8qTqzyV-A6aJircP4R6tiOBRCY5QCFQrAd_gZ8z-LsyNvUHuDipQ7S" target="_blank">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="西大快乐音" style="filter: invert(0);"> 抖音
+        </a>
+        <a href="https://www.zhihu.com/people/7-97-53-5-79" target="_blank">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/zhihu.svg" alt="不知" style="filter: invert(0);"> 知乎
+        </a>
+    </div>
+</div>
     <script>
         (function() {
             // DOM 元素
