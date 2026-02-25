@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>南梁指数计算器</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: linear-gradient(145deg, #f9f3e8 0%, #ffe6d5 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            padding: 16px;
+            margin: 0;
+        }
+        .card {
+            max-width: 680px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 48px 48px 40px 40px;
+            box-shadow: 0 25px 45px -10px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 215, 175, 0.6) inset;
+            padding: 32px 32px 42px;
+            transition: 0.3s;
+            border: 1px solid #fff9f0;
+        }
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #4a2a1a;
+            text-shadow: 3px 3px 0 #ffcd94, 5px 5px 0 rgba(255, 185, 120, 0.4);
+            margin-bottom: 20px;
+            text-align: center;
+            word-break: break-word;
+            line-height: 1.1;
+            transform: rotate(-0.5deg);
+        }
+        h1 span {
+            display: inline-block;
+            transform: scale(1.02) rotate(1deg);
+            background: #fff1b8;
+            padding: 0 12px;
+            border-radius: 120px;
+        }
+        .nickname-area {
+            background: #fff4e6;
+            border-radius: 120px;
+            padding: 6px 6px 6px 24px;
+            margin: 24px 0 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 8px 0 #cb9e7c, 0 12px 20px -12px #7f4f33;
+            border: 2px solid #ffc399;
+            transition: opacity 0.3s ease;
+        }
+        .nickname-area label {
+            font-weight: 600;
+            color: #633d1f;
+            margin-right: 8px;
+            font-size: 1.2rem;
+            white-space: nowrap;
+        }
+        .nickname-area input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 14px 4px 14px 8px;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #3b280b;
+            outline: none;
+            min-width: 0;
+        }
+        .nickname-area input::placeholder {
+            color: #b1977e;
+            font-style: italic;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+        .nickname-area input:focus::placeholder {
+            opacity: 0.3;
+        }
+        .questions-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin: 36px 0 32px;
+            transition: opacity 0.25s ease, transform 0.2s;
+        }
+        .question-item {
+            background: #ffffffd9;
+            backdrop-filter: blur(4px);
+            border-radius: 40px;
+            padding: 12px 20px 16px 28px;
+            box-shadow: 0 4px 0 #dbb594, 0 8px 16px -10px #ab7e5a;
+            border: 1px solid #ffe7d4;
+            transition: 0.2s;
+        }
+        .question-text {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #472812;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .question-text::before {
+            content: "🤔";
+            font-size: 1.6rem;
+            filter: drop-shadow(2px 2px 0 #efb68b);
+            margin-right: 6px;
+        }
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 8px 2px;
+            background: #f7ede1;
+            padding: 10px 12px;
+            border-radius: 60px;
+            border: 2px solid #ebc7a6;
+        }
+        .options label {
+            flex: 1 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-weight: 600;
+            color: #573f2b;
+            padding: 8px 6px;
+            border-radius: 100px;
+            background: #fcf3e9;
+            border: 2px solid transparent;
+            transition: 0.1s;
+            cursor: pointer;
+            box-shadow: 0 2px 0 #cfa97c;
+            font-size: 1rem;
+            min-width: 80px;
+        }
+        .options label:hover {
+            background: #ffdbbd;
+            border-color: #fcb176;
+            transform: scale(0.98);
+        }
+        input[type="radio"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #b47b56;
+            border-radius: 50%;
+            background: white;
+            margin: 0;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.07s linear;
+        }
+        input[type="radio"]:checked {
+            border: 5px solid #b45f2a;
+            background: #ffddb0;
+            box-shadow: 0 0 0 1px #ffb063;
+        }
+        .options label:has(input[value="总是"]:checked) {
+            background: #ffdbb0;
+            border-color: #ea9e5b;
+            font-weight: 700;
+        }
+        .big-button {
+            background: #ffa54b;
+            border: none;
+            border-radius: 60px;
+            padding: 22px 24px;
+            width: 100%;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #2d1705;
+            text-shadow: 2px 2px 0 #ffd58c;
+            box-shadow: 0 10px 0 #934f1f, 0 12px 25px -5px #bb6a31;
+            cursor: pointer;
+            transition: 0.1s linear;
+            margin: 18px 0 8px;
+            border: 2px solid #ffce93;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        .big-button:active {
+            transform: translateY(6px);
+            box-shadow: 0 4px 0 #934f1f, 0 12px 20px -8px #b75f29;
+        }
+        .big-button img {
+            width: 40px;
+            height: 40px;
+            filter: drop-shadow(2px 2px 0 #e58935);
+        }
+        .fake-calc {
+            animation: none;
+        }
+        .fake-calc--active {
+            animation: glitch 0.25s infinite alternate;
+        }
+        @keyframes glitch {
+            0% { opacity: 1; transform: skew(0deg); background: #ffb271; }
+            50% { opacity: 0.8; transform: skew(2deg) scale(0.99); background: #f5a141; letter-spacing: 4px; }
+            100% { opacity: 1; transform: skew(-2deg); background: #ff944d; }
+        }
+        .pseudo-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.2);
+            backdrop-filter: blur(3px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s;
+        }
+        .pseudo-modal {
+            background: #fef6e8;
+            border-radius: 60px;
+            padding: 40px 50px;
+            border: 4px solid #ffb779;
+            box-shadow: 0 30px 0 #a55118, 0 35px 40px #4f2d11;
+            text-align: center;
+            max-width: 460px;
+            transform: rotate(0.5deg);
+        }
+        .pseudo-modal h2 {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #44280d;
+            text-shadow: 4px 4px 0 #ffc076;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+        .pseudo-modal p {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #2f1d0c;
+            background: #ffddb5;
+            padding: 16px 20px;
+            border-radius: 200px;
+            border: 3px solid #e69953;
+        }
+        .pseudo-modal .spinner {
+            font-size: 3.5rem;
+            line-height: 1.4;
+            filter: drop-shadow(6px 6px 0 #be7540);
+            animation: spin 0.9s infinite steps(8);
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .pseudo-modal.active {
+            opacity: 1;
+            pointer-events: none;
+        }
+        .final-result-animation {
+            background: #fae6d2;
+            border-radius: 60px;
+            padding: 30px 18px 38px;
+            margin: 25px 0 15px;
+            border: 4px solid #ffb155;
+            box-shadow: inset 0 0 0 2px #ffe2be, 0 12px 0 #7b4d2b;
+            text-align: center;
+            transition: all 0.3s;
+            animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.3) rotate(-5deg); }
+            80% { transform: scale(1.02) rotate(1deg); }
+            100% { opacity: 1; transform: scale(1) rotate(0); }
+        }
+        .result-nick {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: #391f09;
+            text-shadow: 2px 2px 0 #ffbd7a;
+            word-break: break-word;
+        }
+        .result-divider {
+            height: 6px;
+            background: #d68d55;
+            width: 80px;
+            margin: 10px auto 20px;
+            border-radius: 10px;
+        }
+        .result-big-text {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: #562f0e;
+            background: #fff1bb;
+            display: inline-block;
+            padding: 8px 35px;
+            border-radius: 120px;
+            border: 4px solid #f49d50;
+            transform: rotate(-0.5deg);
+            box-shadow: 0 7px 0 #9f6739;
+            margin: 12px 0 8px;
+            line-height: 1.2;
+        }
+        .result-emoji {
+            font-size: 2rem;
+            line-height: 1;
+            filter: drop-shadow(4px 4px 0 #a75115);
+            margin: 8px 0 0;
+        }
+
+        .hidden-layout {
+            opacity: 0 !important;
+            transform: scale(0.96) !important;
+            pointer-events: none;
+            transition: 0.25s;
+            height: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+        .hidden-layout .questions-grid,
+        .hidden-layout .nickname-area {
+            margin: 0;
+            padding: 0;
+        }
+
+        .footer-simple {
+            text-align: center;
+            font-size: 1rem;
+            background: transparent;
+            color: #1f2b30;
+            margin-top: 30px;
+            padding: 12px 0;
+            border-top: 2px solid #cbbfb0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+        .footer-simple a {
+            color: #1f2b30;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #ece4d9;
+            padding: 8px 24px;
+            border-radius: 60px;
+            border: 2px solid #b89b7b;
+            transition: 0.15s;
+        }
+        .footer-simple a:hover {
+            background: #b89b7b;
+            color: white;
+            border-color: #6e543b;
+        }
+        .footer-simple img {
+            width: 24px;
+            height: 24px;
+            filter: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="pseudo-modal-overlay" id="pseudoModal">
+        <div class="pseudo-modal">
+            <h2>⚡ 计算中 ⚡</h2>
+            <div class="spinner">⚧️⚧️⚧️</div>
+            <p>布莱切利庄园分析中……</p>
+        </div>
+    </div>
+
+    <div class="card" id="mainCard">
+        <h1>
+            <span>计算您的南梁指数</span>
+        </h1>
+        <div class="nickname-area" id="nickSection">
+            <label for="nickInput">昵称</label>
+            <input type="text" id="nickInput" placeholder="卧思意致宵难凉">
+        </div>
+        <div class="questions-grid" id="questionsGrid">
+            <!-- 问题1 -->
+            <div class="question-text">你有慕强(尤其男性)心理吗？</div>
+            <div class="options" data-q="1">
+                <label><input type="radio" name="q1" value="绝不"> 绝不</label>
+                <label><input type="radio" name="q1" value="偶尔"> 偶尔</label>
+                <label><input type="radio" name="q1" value="经常"> 经常</label>
+                <label><input type="radio" name="q1" value="总是" checked> 总是</label>
+            </div>
+            <!-- 问题2 -->
+            <div class="question-text">你对异性有好感吗？</div>
+            <div class="options" data-q="2">
+                <label><input type="radio" name="q2" value="绝不"> 绝不</label>
+                <label><input type="radio" name="q2" value="偶尔"> 偶尔</label>
+                <label><input type="radio" name="q2" value="经常"> 经常</label>
+                <label><input type="radio" name="q2" value="总是" checked> 总是</label>
+            </div>
+            <!-- 问题3 -->
+            <div class="question-text">你会在意自己留给他人的印象吗？</div>
+            <div class="options" data-q="3">
+                <label><input type="radio" name="q3" value="绝不"> 绝不</label>
+                <label><input type="radio" name="q3" value="偶尔"> 偶尔</label>
+                <label><input type="radio" name="q3" value="经常"> 经常</label>
+                <label><input type="radio" name="q3" value="总是" checked> 总是</label>
+            </div>
+            <!-- 问题4 -->
+            <div class="question-text">你与异性更亲近吗？</div>
+            <div class="options" data-q="4">
+                <label><input type="radio" name="q4" value="绝不"> 绝不</label>
+                <label><input type="radio" name="q4" value="偶尔"> 偶尔</label>
+                <label><input type="radio" name="q4" value="经常"> 经常</label>
+                <label><input type="radio" name="q4" value="总是" checked> 总是</label>
+            </div>
+            <!-- 问题5 -->
+            <div class="question-text">你感觉自己是南梁吗？</div>
+            <div class="options" data-q="5">
+                <label><input type="radio" name="q5" value="绝不"> 绝不</label>
+                <label><input type="radio" name="q5" value="偶尔"> 偶尔</label>
+                <label><input type="radio" name="q5" value="经常"> 经常</label>
+                <label><input type="radio" name="q5" value="总是" checked> 总是</label>
+            </div>
+        </div>
+        <button class="big-button" id="calcBtn">
+            <span>⚧️</span> 开始计算 <span>⚧️</span>
+        </button>
+
+        <!-- 最终结果动画容器(一开始为空) 将插入动态结果并清空原布局 -->
+        <div id="resultAnimationArea" style="min-height:20px;"></div>
+
+        <div class="footer-simple">
+            <a href="https://github.com/CraftSoul/femboy" target="_blank">
+                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/github.svg" alt="gayhub" style="filter: invert(0);"> GitHub
+            </a>
+            <a href="https://space.bilibili.com/3546775476505152" target="_blank">
+                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/bilibili.svg" alt="ilidilid" style="filter: invert(0);"> BiliBili
+            </a>
+            <a href="https://www.douyin.com/user/MS4wLjABAAAAERwZXqP_VI8qTqzyV-A6aJircP4R6tiOBRCY5QCFQrAd_gZ8z-LsyNvUHuDipQ7S" target="_blank">
+                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="西大快乐音" style="filter: invert(0);"> 抖音
+            </a>
+            <a href="https://www.zhihu.com/people/7-97-53-5-79" target="_blank">
+                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/zhihu.svg" alt="不知" style="filter: invert(0);"> 知乎
+            </a>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // DOM 元素
+            const nickInput = document.getElementById('nickInput');
+            const calcButton = document.getElementById('calcBtn');
+            const pseudoModal = document.getElementById('pseudoModal');
+            const nickSection = document.getElementById('nickSection');
+            const questionsGrid = document.getElementById('questionsGrid');
+            const resultArea = document.getElementById('resultAnimationArea');
+            const mainCard = document.getElementById('mainCard');
+
+            // 防连点
+            let isCalculating = false;
+            function startOneTimeTransformation() {
+                if (isCalculating) return;
+                isCalculating = true;
+                pseudoModal.classList.add('active');
+                calcButton.classList.add('fake-calc--active');
+                calcButton.disabled = true;
+                if (questionsGrid) {
+                    questionsGrid.style.transition = 'transform 0.1s';
+                    questionsGrid.style.transform = 'rotate(0.8deg) scale(1.02)';
+                }
+                setTimeout(() => {
+                    pseudoModal.classList.remove('active');
+                    calcButton.classList.remove('fake-calc--active');
+                    calcButton.disabled = false;
+                    if (nickSection) nickSection.style.display = 'none';
+                    if (questionsGrid) questionsGrid.style.display = 'none';
+                    calcButton.style.display = 'none';
+                    if (questionsGrid) questionsGrid.style.transform = '';
+                    let nickname = nickInput.value.trim();
+                    if (nickname === '') nickname = '滚木';
+                    resultArea.innerHTML = `
+                        <div class="final-result-animation">
+                            <div class="result-nick">${escapeHtml(nickname)}</div>
+                            <div class="result-divider"></div>
+                            <div class="result-big-text">香香软软小南梁</div>
+                            <div class="result-emoji">😋 100% 😋</div>
+                            <div style="font-size:1.5rem; margin-top:20px; color:#5f3b1d; font-weight:600;">可喜可贺，可喜可贺</div>
+                        </div>
+                    `;
+
+                }, 420);
+            }
+
+            // 简易转义，防止XSS
+            function escapeHtml(unsafe) {
+                return unsafe.replace(/[&<>"]/g, function(m) {
+                    if(m === '&') return '&amp;'; if(m === '<') return '&lt;'; if(m === '>') return '&gt;'; if(m === '"') return '&quot;';
+                    return m;
+                });
+            }
+
+            // 点击主事件
+            calcButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (isCalculating) return;
+                startOneTimeTransformation();
+            });
+            calcButton.addEventListener('mousedown', function() {
+                if (!questionsGrid || isCalculating) return;
+                questionsGrid.style.transition = 'transform 0.05s';
+                questionsGrid.style.transform = 'rotate(0.5deg) scale(1.01)';
+                setTimeout(() => {
+                    if (questionsGrid && !isCalculating) {
+                        questionsGrid.style.transform = '';
+                    }
+                }, 100);
+            });
+        })();
+    </script>
+</body>
+</html>
